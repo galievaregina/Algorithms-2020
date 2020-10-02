@@ -15,7 +15,6 @@ class TaskTestsJava : AbstractTaskTests() {
         assertThrows<IllegalArgumentException> { JavaTasks.sortTimes("input/myTestTime_in1.txt", "output.txt") }
         assertThrows<IllegalArgumentException> { JavaTasks.sortTimes("input/myTestTime_in2.txt", "output.txt") }
         assertThrows<IllegalArgumentException> { JavaTasks.sortTimes("input/myTestTime_in3.txt", "output.txt") }
-
     }
 
 
@@ -24,8 +23,8 @@ class TaskTestsJava : AbstractTaskTests() {
     fun testSortAddressesJava() {
         sortAddresses { inputName, outputName -> JavaTasks.sortAddresses(inputName, outputName) }
         assertThrows<IllegalArgumentException> { JavaTasks.sortTimes("input/myTestAddr_in1.txt", "output.txt") }
-        assertThrows<IllegalArgumentException> { JavaTasks.sortTimes("input/myTestAddr_in2.txt", "output.txt") }
-        assertThrows<IllegalArgumentException> { JavaTasks.sortTimes("input/myTestAddr_in3.txt", "output.txt") }
+        assertThrows<IllegalArgumentException> { JavaTasks.sortTimes("input/MyTestAddr_in2.txt", "output.txt") }
+        assertThrows<IllegalArgumentException> { JavaTasks.sortTimes("input/MyTestAddr_in3.txt", "output.txt") }
     }
 
     @Test
@@ -34,6 +33,7 @@ class TaskTestsJava : AbstractTaskTests() {
         sortTemperatures { inputName, outputName -> JavaTasks.sortTemperatures(inputName, outputName) }
         assertThrows<IllegalArgumentException> { JavaTasks.sortTimes("input/myTestTemp_in1.txt", "output.txt") }
         assertThrows<IllegalArgumentException> { JavaTasks.sortTimes("input/myTestTemp_in2.txt", "output.txt") }
+        assertThrows<IllegalArgumentException> { JavaTasks.sortTimes("input/myTestTemp3.txt", "output.txt") }
     }
 
     @Test

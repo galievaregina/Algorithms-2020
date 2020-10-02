@@ -39,6 +39,8 @@ public class JavaTasks {
      * <p>
      * В случае обнаружения неверного формата файла бросить любое исключение.
      */
+
+    //O(N)=Nlog2(N);
     static public void sortTimes(String inputName, String outputName) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(new File(inputName)));
         BufferedWriter writer = new BufferedWriter(new FileWriter(new File(outputName)));
@@ -55,8 +57,8 @@ public class JavaTasks {
         }
         int[] am = Arrays.stream(amList.toArray(new Integer[0])).mapToInt(i -> i).toArray();
         int[] pm = Arrays.stream(pmList.toArray(new Integer[0])).mapToInt(i -> i).toArray();
-        Sorts.insertionSort(am);
-        Sorts.insertionSort(pm);
+        Sorts.mergeSort(am);
+        Sorts.mergeSort(pm);
         Arrays.stream(am).forEach(x -> {
             try {
                 writer.write(timeInFormat(x) + " AM\n");
@@ -125,6 +127,8 @@ public class JavaTasks {
      * <p>
      * В случае обнаружения неверного формата файла бросить любое исключение.
      */
+
+    //O(N)= Nlog2(N);
     static public void sortAddresses(String inputName, String outputName) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(new File(inputName), StandardCharsets.UTF_8));
         BufferedWriter writer = new BufferedWriter(new FileWriter(new File(outputName), StandardCharsets.UTF_8));
@@ -186,6 +190,7 @@ public class JavaTasks {
      * 99.5
      * 121.3
      */
+    // O(N)=Nlog2(N);
     static public void sortTemperatures(String inputName, String outputName) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(new File(inputName)));
         BufferedWriter writer = new BufferedWriter(new FileWriter(new File(outputName)));
@@ -195,9 +200,10 @@ public class JavaTasks {
             if(!Pattern.matches("-?\\d+.\\d{1}", line))throw new IllegalArgumentException();
             if(line.substring(0,1) == "-"){
                 double value = Double.parseDouble(line.substring(1))*(-1);
-                if( value > -200) throw new IllegalStateException();
-                temperature.add(value);
-            }else if (Double.parseDouble(line) > 500) temperature.add(Double.parseDouble(line));
+                if( value > -200) throw new IllegalArgumentException();
+                else temperature.add(value);
+            }else if (Double.parseDouble(line) > 500) throw new IllegalArgumentException();
+            else temperature.add(Double.parseDouble(line));
             line = reader.readLine();
         }
         Collections.sort(temperature);
