@@ -7,7 +7,6 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.Pattern;
 
-@SuppressWarnings("unused")
 public class JavaAlgorithms {
     /**
      * Получение наибольшей прибыли (она же -- поиск максимального подмассива)
@@ -33,6 +32,7 @@ public class JavaAlgorithms {
      * <p>
      * В случае обнаружения неверного формата файла бросить любое исключение.
      */
+    // O(N) =NlogN;
     static public Pair<Integer, Integer> optimizeBuyAndSell(String inputName) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(inputName));
         String line = reader.readLine();
@@ -137,8 +137,30 @@ public class JavaAlgorithms {
      * Если имеется несколько самых длинных общих подстрок одной длины,
      * вернуть ту из них, которая встречается раньше в строке first.
      */
+    //M,N-длины сравниваемых строк
+    //Трудоемкость и ресуроемкость-O(M*N)
     static public String longestCommonSubstring(String firs, String second) {
-        throw new NotImplementedError();
+        int[][] matrix = new int[firs.length() + 1][second.length() + 1];
+        char[] firstWord = firs.toCharArray();
+        char[] secondWord = second.toCharArray();
+        StringBuilder res = new StringBuilder();
+        int max = 0;
+        int coordinate = 0;
+        for (int i = 0; i < firs.length(); i++) {
+            for (int j = 0; j < second.length(); j++) {
+                if (firstWord[i] == secondWord[j]) {
+                    matrix[i + 1][j + 1] = matrix[i][j] + 1;
+                    if (matrix[i + 1][j + 1] > max) {
+                        coordinate = i;
+                        max = matrix[i + 1][j + 1];
+                    }
+                }
+            }
+        }
+        for (int k = coordinate - max + 1; k <= coordinate; k++) {
+            res.append(firstWord[k]);
+        }
+        return res.toString();
     }
 
     /**
@@ -151,7 +173,25 @@ public class JavaAlgorithms {
      * Справка: простым считается число, которое делится нацело только на 1 и на себя.
      * Единица простым числом не считается.
      */
+    //O(NloglogN)
+    //Ресурсоемкость- O(N)
     static public int calcPrimesNumber(int limit) {
-        throw new NotImplementedError();
+        if (limit <= 1) return 0;
+        boolean[] array = new boolean[limit + 1];
+        Arrays.fill(array, true);
+        array[0] = false;
+        array[1] = false;
+        int falseCount = 0;
+        for (int i = 2; i * i <= limit; i++) {
+            if (array[i]) {
+                for (int j = i * i; j <= limit; j += i) {
+                    if (array[j]) {
+                        array[j] = false;
+                        falseCount++;
+                    }
+                }
+            }
+        }
+        return limit - 1 - falseCount;
     }
 }

@@ -1,7 +1,9 @@
 package lesson2
 
+import org.junit.jupiter.api.assertThrows
 import java.io.BufferedWriter
 import java.io.File
+import java.lang.IllegalArgumentException
 import java.util.*
 import kotlin.test.assertEquals
 
@@ -58,6 +60,12 @@ abstract class AbstractAlgorithmsTests {
         } finally {
             File("temp_prices.txt").delete()
         }
+        assertThrows<IllegalArgumentException> {
+            optimizeBuyAndSell("input/buysell_in4.txt")
+        }
+        assertThrows<IllegalArgumentException> {
+            optimizeBuyAndSell("input/buysell_in5.txt")
+        }
     }
 
     fun josephTask(josephTask: (Int, Int) -> Int) {
@@ -74,6 +82,9 @@ abstract class AbstractAlgorithmsTests {
     }
 
     fun longestCommonSubstring(longestCommonSubstring: (String, String) -> String) {
+        assertEquals("егина", longestCommonSubstring("парампамРегина", "я регина"))
+        assertEquals("думай позитивно стакан всегда наполовину полон",
+            longestCommonSubstring("думай позитивно стакан всегда наполовину полон", "думай позитивно стакан всегда наполовину полоннннннн"))
         assertEquals("", longestCommonSubstring("мой мир", "я"))
         assertEquals("зд", longestCommonSubstring("здравствуй мир", "мы здесь"))
         assertEquals("СЕРВАТОР", longestCommonSubstring("ОБСЕРВАТОРИЯ", "КОНСЕРВАТОРЫ"))
@@ -144,5 +155,6 @@ abstract class AbstractAlgorithmsTests {
         assertEquals(148933, calcPrimesNumber(2000000))
         assertEquals(348513, calcPrimesNumber(5000000))
         assertEquals(664579, calcPrimesNumber(10000000))
+        assertEquals(3, calcPrimesNumber(6))
     }
 }

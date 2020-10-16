@@ -42,39 +42,37 @@ public class JavaTasks {
 
     //O(N)=Nlog2(N);
     static public void sortTimes(String inputName, String outputName) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(new File(inputName)));
-        BufferedWriter writer = new BufferedWriter(new FileWriter(new File(outputName)));
         List<Integer> amList = new ArrayList<>();
         List<Integer> pmList = new ArrayList<>();
-        String line = reader.readLine();
-        while (line != null) {
-            if(!Pattern.matches("\\d{2}:\\d{2}:\\d{2}\\sPM|\\d{2}:\\d{2}:\\d{2}\\sAM",line))throw new IllegalArgumentException();
-            String[] partsOfTime = line.split(" ");
-            if (partsOfTime[1].equals("AM")) {
-                amList.add(timeInSeconds(partsOfTime[0]));
-            } else pmList.add(timeInSeconds(partsOfTime[0]));
-            line = reader.readLine();
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputName));
+             BufferedWriter writer = new BufferedWriter(new FileWriter(outputName))) {
+            String line = reader.readLine();
+            while (line != null) {
+                if (!Pattern.matches("\\d{2}:\\d{2}:\\d{2}\\sPM|\\d{2}:\\d{2}:\\d{2}\\sAM", line))
+                    throw new IllegalArgumentException();
+                String[] partsOfTime = line.split(" ");
+                if (partsOfTime[1].equals("AM")) {
+                    amList.add(timeInSeconds(partsOfTime[0]));
+                } else pmList.add(timeInSeconds(partsOfTime[0]));
+                line = reader.readLine();
+            }
+            Collections.sort(amList);
+            Collections.sort(pmList);
+            amList.stream().forEach(x -> {
+                try {
+                    writer.write(timeInFormat(x) + " AM\n");
+                } catch (IOException e) {
+                    throw new IllegalArgumentException();
+                }
+            });
+            pmList.stream().forEach(x -> {
+                try {
+                    writer.write(timeInFormat(x) + " PM\n");
+                } catch (IOException e) {
+                    throw new IllegalArgumentException();
+                }
+            });
         }
-        int[] am = Arrays.stream(amList.toArray(new Integer[0])).mapToInt(i -> i).toArray();
-        int[] pm = Arrays.stream(pmList.toArray(new Integer[0])).mapToInt(i -> i).toArray();
-        Sorts.mergeSort(am);
-        Sorts.mergeSort(pm);
-        Arrays.stream(am).forEach(x -> {
-            try {
-                writer.write(timeInFormat(x) + " AM\n");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        Arrays.stream(pm).forEach(x -> {
-            try {
-                writer.write(timeInFormat(x) + " PM\n");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-
-        writer.close();
     }
 
     private static int timeInSeconds(String time) {
@@ -130,34 +128,34 @@ public class JavaTasks {
 
     //O(N)= Nlog2(N);
     static public void sortAddresses(String inputName, String outputName) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(new File(inputName), StandardCharsets.UTF_8));
-        BufferedWriter writer = new BufferedWriter(new FileWriter(new File(outputName), StandardCharsets.UTF_8));
         Map<String, TreeSet<String>> commonAdd = new TreeMap<>();
-        String line = reader.readLine();
-        while (line != null) {
-            if(!Pattern.matches("[А-ЯЁа-яёPa-]+\\s[А-ЯЁа-яё-]+\\s-\\s[А-ЯЁа-яё-]+\\s\\d+",line)) throw new IllegalArgumentException();
-            String[] partsOfData = line.split(" - ");
-            if (commonAdd.keySet().contains(partsOfData[1])) {
-                commonAdd.get(partsOfData[1]).add(partsOfData[0]);
-            } else commonAdd.put(partsOfData[1], new TreeSet<>(Collections.singleton(partsOfData[0])));
-            line = reader.readLine();
-        }
-        Map<String, TreeSet<Integer>> streetAndNumber = new TreeMap<>();
-        for (String a : commonAdd.keySet()) {
-            String[] partsOfAdd = a.split(" ");
-            if (streetAndNumber.keySet().contains(partsOfAdd[0])) {
-                streetAndNumber.get(partsOfAdd[0]).add(Integer.parseInt(partsOfAdd[1]));
-            } else
-                streetAndNumber.put(partsOfAdd[0], new TreeSet<>(Collections.singleton(Integer.parseInt(partsOfAdd[1]))));
-        }
-        for (Map.Entry<String, TreeSet<Integer>> element : streetAndNumber.entrySet()) {
-            for (Integer num : element.getValue()) {
-                String names = commonAdd.get(element.getKey() + " " + num).toString();
-                writer.write(element.getKey() + " " + num + " - " + names.substring(1, names.length() - 1) + "\n");
+        try (BufferedReader reader = new BufferedReader(new FileReader(new File(inputName), StandardCharsets.UTF_8));
+             BufferedWriter writer = new BufferedWriter(new FileWriter(new File(outputName), StandardCharsets.UTF_8))) {
+            String line = reader.readLine();
+            while (line != null) {
+                if (!Pattern.matches("[А-ЯЁа-яёPa-]+\\s[А-ЯЁа-яё-]+\\s-\\s[А-ЯЁа-яё-]+\\s\\d+", line))
+                    throw new IllegalArgumentException();
+                String[] partsOfData = line.split(" - ");
+                if (commonAdd.keySet().contains(partsOfData[1])) {
+                    commonAdd.get(partsOfData[1]).add(partsOfData[0]);
+                } else commonAdd.put(partsOfData[1], new TreeSet<>(Collections.singleton(partsOfData[0])));
+                line = reader.readLine();
+            }
+            Map<String, TreeSet<Integer>> streetAndNumber = new TreeMap<>();
+            for (String a : commonAdd.keySet()) {
+                String[] partsOfAdd = a.split(" ");
+                if (streetAndNumber.keySet().contains(partsOfAdd[0])) {
+                    streetAndNumber.get(partsOfAdd[0]).add(Integer.parseInt(partsOfAdd[1]));
+                } else
+                    streetAndNumber.put(partsOfAdd[0], new TreeSet<>(Collections.singleton(Integer.parseInt(partsOfAdd[1]))));
+            }
+            for (Map.Entry<String, TreeSet<Integer>> element : streetAndNumber.entrySet()) {
+                for (Integer num : element.getValue()) {
+                    String names = commonAdd.get(element.getKey() + " " + num).toString();
+                    writer.write(element.getKey() + " " + num + " - " + names.substring(1, names.length() - 1) + "\n");
+                }
             }
         }
-
-        writer.close();
     }
 
     /**
@@ -190,31 +188,29 @@ public class JavaTasks {
      * 99.5
      * 121.3
      */
-    // O(N)=Nlog2(N);
+    // Трудоемкость - O(N);
     static public void sortTemperatures(String inputName, String outputName) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(new File(inputName)));
-        BufferedWriter writer = new BufferedWriter(new FileWriter(new File(outputName)));
-        List<Double> temperature = new ArrayList<>();
-        String line = reader.readLine();
-        while (line != null){
-            if(!Pattern.matches("-?\\d+.\\d{1}", line))throw new IllegalArgumentException();
-            if(line.substring(0,1) == "-"){
-                double value = Double.parseDouble(line.substring(1))*(-1);
-                if( value > -200) throw new IllegalArgumentException();
-                else temperature.add(value);
-            }else if (Double.parseDouble(line) > 500) throw new IllegalArgumentException();
-            else temperature.add(Double.parseDouble(line));
-            line = reader.readLine();
-        }
-        Collections.sort(temperature);
-        (temperature).stream().forEach(x-> {
-            try {
-                writer.write(x.toString() + "\n");
-            } catch (IOException e) {
-                e.printStackTrace();
+        try (BufferedReader reader = new BufferedReader(new FileReader(new File(inputName)));
+             BufferedWriter writer = new BufferedWriter(new FileWriter(new File(outputName)))) {
+            List<Integer> temperatures = new ArrayList<>();
+            String line = reader.readLine();
+            while (line != null) {
+                if (!Pattern.matches("-?\\d+.\\d{1}", line)) throw new IllegalArgumentException();
+                double value = Double.parseDouble(line);
+                if (value < - 273 || value > 500) throw new IllegalArgumentException();
+                temperatures.add((int)(value * 10 + 2730));
+                line = reader.readLine();
             }
-        });
-        writer.close();
+            int[] res = Sorts.countingSort(temperatures.stream().mapToInt(i -> i).toArray(), 7730);
+            Arrays.stream(res).forEach(x -> {
+                try {
+                    double format = x - 2730;
+                    writer.write(format /10 + "\n");
+                } catch (IOException e) {
+                    throw new IllegalArgumentException();
+                }
+            });
+        }
     }
 
     /**
