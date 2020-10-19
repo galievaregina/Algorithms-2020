@@ -40,7 +40,7 @@ public class JavaTasks {
      * В случае обнаружения неверного формата файла бросить любое исключение.
      */
 
-    //O(N)=Nlog2(N);
+    //Т=Nlog2(N);
     static public void sortTimes(String inputName, String outputName) throws IOException {
         List<Integer> amList = new ArrayList<>();
         List<Integer> pmList = new ArrayList<>();
@@ -126,7 +126,7 @@ public class JavaTasks {
      * В случае обнаружения неверного формата файла бросить любое исключение.
      */
 
-    //O(N)= Nlog2(N);
+    //T=Nlog2(N);
     static public void sortAddresses(String inputName, String outputName) throws IOException {
         Map<String, TreeSet<String>> commonAdd = new TreeMap<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(new File(inputName), StandardCharsets.UTF_8));
@@ -188,7 +188,7 @@ public class JavaTasks {
      * 99.5
      * 121.3
      */
-    // Трудоемкость - O(N);
+    // Т= O(N);
     static public void sortTemperatures(String inputName, String outputName) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(new File(inputName)));
              BufferedWriter writer = new BufferedWriter(new FileWriter(new File(outputName)))) {

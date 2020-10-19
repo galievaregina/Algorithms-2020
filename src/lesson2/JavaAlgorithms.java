@@ -32,7 +32,7 @@ public class JavaAlgorithms {
      * <p>
      * В случае обнаружения неверного формата файла бросить любое исключение.
      */
-    // O(N) =NlogN;
+    // T = NlogN;
     static public Pair<Integer, Integer> optimizeBuyAndSell(String inputName) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(inputName));
         String line = reader.readLine();
@@ -138,7 +138,7 @@ public class JavaAlgorithms {
      * вернуть ту из них, которая встречается раньше в строке first.
      */
     //M,N-длины сравниваемых строк
-    //Трудоемкость и ресуроемкость-O(M*N)
+    //Т=R=O(M*N)
     static public String longestCommonSubstring(String firs, String second) {
         int[][] matrix = new int[firs.length() + 1][second.length() + 1];
         char[] firstWord = firs.toCharArray();
@@ -173,8 +173,8 @@ public class JavaAlgorithms {
      * Справка: простым считается число, которое делится нацело только на 1 и на себя.
      * Единица простым числом не считается.
      */
-    //O(NloglogN)
-    //Ресурсоемкость- O(N)
+    //T=O(NloglogN)
+    //R=O(N)
     static public int calcPrimesNumber(int limit) {
         if (limit <= 1) return 0;
         boolean[] array = new boolean[limit + 1];
