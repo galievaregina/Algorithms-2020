@@ -153,17 +153,17 @@ public class BinarySearchTree<T extends Comparable<T>> extends AbstractSet<T> im
     }
 
     public class BinarySearchTreeIterator implements Iterator<T> {
-        Stack<Node<T>> stack ;
+        ArrayDeque<Node<T>> deque ;
         Node<T> currentNode;
 
         private BinarySearchTreeIterator() {
-            stack = new Stack<>();
+            deque = new ArrayDeque<>();
             if(root == null) return;
             currentNode = root;
-            stack.push(currentNode);
+            deque.push(currentNode);
             while (currentNode.left != null) {
                 currentNode = currentNode.left;
-                stack.push(currentNode);
+                deque.push(currentNode);
             }
         }
 
@@ -182,7 +182,7 @@ public class BinarySearchTree<T extends Comparable<T>> extends AbstractSet<T> im
         //R=O(1)
         @Override
         public boolean hasNext() {
-            return !stack.isEmpty();
+            return !deque.isEmpty();
         }
 
         /**
@@ -203,14 +203,14 @@ public class BinarySearchTree<T extends Comparable<T>> extends AbstractSet<T> im
         @Override
         public T next() {
             if (!hasNext()) throw new IllegalStateException();
-            currentNode = stack.pop();
+            currentNode = deque.pop();
             T val = currentNode.value;
             if (currentNode.right != null) {
                 currentNode = currentNode.right;
-                stack.push(currentNode);
+                deque.push(currentNode);
                 while (currentNode.left != null) {
                     currentNode = currentNode.left;
-                    stack.push(currentNode);
+                    deque.push(currentNode);
                 }
             }
             return val;
