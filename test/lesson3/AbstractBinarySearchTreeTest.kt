@@ -107,6 +107,38 @@ abstract class AbstractBinarySearchTreeTest {
     }
 
     protected fun doRemoveTest() {
+        val mySet = mutableSetOf<Int>()
+        mySet.addAll(arrayOf(12, 11, 83, 190, 274, 1, 3, 688, 532))
+        val toRemove = 688
+        println("Initial set: $mySet")
+        val binarySet = create()
+        assertFalse(binarySet.remove(toRemove))
+        assertEquals(0, binarySet.size)
+        mySet.remove(toRemove)
+        println("Control set: $mySet")
+        val expectedSize = binarySet.size - 1
+        val maxHeight = binarySet.height()
+        println("Removing element $toRemove from the tree...")
+        assertTrue(
+            toRemove !in binarySet,
+            "The tree contains a supposedly removed element."
+        )
+        assertTrue(
+            binarySet.checkInvariant(),
+            "The binary search tree invariant is false after BinarySearchTree.remove()."
+        )
+        assertTrue(
+            binarySet.height() <= maxHeight,
+            "The tree's height increased after BinarySearchTree.remove()."
+        )
+        assertFalse(
+            binarySet.remove(toRemove),
+            "An element that was already not in the tree was supposedly removed."
+        )
+        println("All clear!")
+
+
+
         implementationTest { create().remove(0) }
         val random = Random()
         for (iteration in 1..100) {
@@ -165,6 +197,40 @@ abstract class AbstractBinarySearchTreeTest {
     }
 
     protected fun doIteratorTest() {
+        val mySet = TreeSet<Int>()
+        mySet.addAll(arrayOf(82848, 858584, 2234, 492, 2344, 40432, 1))
+        println("Control set: $mySet")
+        val binarySet = create()
+        assertFalse(
+            binarySet.iterator().hasNext(),
+            "Iterator of an empty tree should not have any next elements."
+        )
+        for (element in mySet) {
+            binarySet += element
+        }
+        val iterator1 = binarySet.iterator()
+        val iterator2 = binarySet.iterator()
+        println("Checking if calling hasNext() changes the state of the iterator...")
+        while (iterator1.hasNext()) {
+            assertEquals(
+                iterator2.next(), iterator1.next(),
+                "Calling BinarySearchTreeIterator.hasNext() changes the state of the iterator."
+            )
+        }
+        val controlIter = mySet.iterator()
+        val binaryIter = binarySet.iterator()
+        println("Checking if the iterator traverses the tree correctly...")
+        while (controlIter.hasNext()) {
+            assertEquals(
+                controlIter.next(), binaryIter.next(),
+                "BinarySearchTreeIterator doesn't traverse the tree correctly."
+            )
+        }
+        assertFailsWith<IllegalStateException>("Something was supposedly returned after the elements ended") {
+            binaryIter.next()
+        }
+        println("All clear!")
+
         implementationTest { create().iterator().hasNext() }
         implementationTest { create().iterator().next() }
         val random = Random()
