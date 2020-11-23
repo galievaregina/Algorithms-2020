@@ -9,9 +9,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 public class OpenAddressingSet<T> extends AbstractSet<T> {
-    enum Deleted {
-        DELETED
-    }
+    Object DELETED = new Object();
 
     private final int bits;
 
@@ -71,7 +69,7 @@ public class OpenAddressingSet<T> extends AbstractSet<T> {
         int startingIndex = startingIndex(t);
         int index = startingIndex;
         Object current = storage[index];
-        while (current != null && current != Deleted.DELETED) {
+        while (current != null && current != DELETED ) {
             if (current.equals(t)) {
                 return false;
             }
@@ -109,7 +107,7 @@ public class OpenAddressingSet<T> extends AbstractSet<T> {
             index = (index + 1) % capacity;
             current = storage[index];
         }
-        storage[index] = Deleted.DELETED;
+        storage[index] = DELETED;
         size--;
         return true;
     }
@@ -144,7 +142,7 @@ public class OpenAddressingSet<T> extends AbstractSet<T> {
         public T next() {
             if(!hasNext()) throw new NoSuchElementException();
             element = null;
-            while(element == null || element == Deleted.DELETED){
+            while(element == null || element == DELETED){
                 element = storage[i];
                 i++;
             }
@@ -155,7 +153,7 @@ public class OpenAddressingSet<T> extends AbstractSet<T> {
         @Override
         public void remove(){
             if(element == null) throw new IllegalStateException();
-            storage[i - 1] = Deleted.DELETED;
+            storage[i - 1] = DELETED;
             elementIndex--;
             size--;
             element = null;
