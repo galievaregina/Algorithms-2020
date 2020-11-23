@@ -35,7 +35,6 @@ abstract class AbstractDynamicTests {
                 """.trimIndent()
             ).length, "Answer must have length of $expectedLength2"
         )
-        assertEquals("gaga", longestCommonSubSequence("dgiagcdcskaj", "sksaoghdkswohadjdjjgkkkma"))
         assertEquals("дс", longestCommonSubSequence("Здравствуй мир", "мы здесь"))
     }
 
